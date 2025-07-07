@@ -3,9 +3,9 @@ import dbConnect from "@/lib/dbConnect";
 import BookingModel from "@/model/Booking.model";
 
 export async function POST(request) {
-  await dbConnect();
-
+  
   try {
+    await dbConnect();
     const { name, email, machineNumber, date, startTime, endTime } = await request.json();
 
     if (!name || !email || !machineNumber || !date || !startTime || !endTime) {

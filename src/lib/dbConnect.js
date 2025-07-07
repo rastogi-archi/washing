@@ -9,7 +9,7 @@ async function dbConnect() {
   }
 
   try {
-    const db = await mongoose.connect("mongodb+srv://rastogiarchi18:EnAQFI9Dsifgvotb@cluster0.pgntakl.mongodb.net/laundry_mate");
+    const db = await mongoose.connect(process.env.MONGODB_URI);
     connection.isConnected = db.connections[0].readyState;
 
     console.log('DATABASE CONNECTED SUCCESSFULLY');
