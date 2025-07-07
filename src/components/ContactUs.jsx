@@ -1,8 +1,35 @@
+'use client'
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import emailjs from '@emailjs/browser'
+import { useState } from "react";
+import toast from "react-hot-toast";
+
 
 const ContactUs = () => {
+
+  const [loading, setLoading] = useState(false);
+
+    const sendEmail = (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        try {
+            emailjs.sendForm(
+                'service_0nz92t5', 
+                'template_u4ozcxj', 
+                e.target, 
+                'kV-2G4_2Wb-J-yHyH'
+            );
+            toast.success("Email sent successfully!");
+            e.target.reset();
+        } catch (error) {
+            toast.error("Failed to send email. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
   return (
     <section className="bg-white dark:bg-gray-900 mt-10 sm:mt-15 px-6 md:px-12 lg:px-24">
@@ -19,7 +46,7 @@ const ContactUs = () => {
         </div>
 
         {/* Right: Contact form */}
-        <form className="space-y-6 bg-gray-50 dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+        <form className="space-y-6 bg-gray-50 dark:bg-gray-800 p-8 rounded-2xl shadow-lg" onSubmit={sendEmail}>
           <div>
             <Label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Name
@@ -62,9 +89,10 @@ const ContactUs = () => {
           <div className="text-center lg:text-left">
             <Button
               type="submit"
+              disabled={loading}
               className="w-full lg:w-auto bg-[#032b56] hover:bg-[#04396b] text-white font-semibold px-6 py-3 rounded-lg transition duration-300"
             >
-              Send Message
+              {loading ? "Sending..." : "Send Message"}
             </Button>
           </div>
         </form>

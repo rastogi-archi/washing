@@ -2,34 +2,59 @@
 
 import Image from 'next/image';
 import React, { useState } from 'react';
-// import toast from 'react-hot-toast';
+import toast from 'react-hot-toast';
+
 
 const BookMachine = () => {
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
-    machine: '',
+    email: '',
+    machineNumber: '',
     date: '',
     startTime: '',
     endTime: '',
   });
 
-  const handleChange = (e) => {
+    const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = (e) => {
+  const bookSlot = async (e) => {
     e.preventDefault();
-    console.log('Booking data:', formData);
-    // toast.success('Slot booked successfully!')
-    // toast.error('Failed to book slot. Please try again.');
-    setFormData({
-      name: '',
-      machine: '',
-      date: '',
-      startTime: '',
-      endTime: '',
-    });
+    setLoading(true);
+
+    try {
+      const res = await fetch('/api/book-machine', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        toast.success('Slot booked successfully!');
+        setFormData({
+          name: '',
+          email: '',
+          machineNumber: '',
+          date: '',
+          startTime: '',
+          endTime: '',
+        });
+      } else {
+        toast.error(data.message || 'Failed to book slot');
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -52,7 +77,7 @@ const BookMachine = () => {
 
         {/* Right Section - Form */}
         <div className="lg:w-1/2 p-8 sm:p-10 space-y-6">
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={bookSlot} className="space-y-5">
             <div>
               <label className="block mb-1 font-semibold text-gray-700">Your Name</label>
               <input
@@ -67,10 +92,23 @@ const BookMachine = () => {
             </div>
 
             <div>
+              <label className="block mb-1 font-semibold text-gray-700">Your Email</label>
+              <input
+                type="text"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-700 transition"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+
+            <div>
               <label className="block mb-1 font-semibold text-gray-700">Machine Number</label>
               <select
-                name="machine"
-                value={formData.machine}
+                name="machineNumber"
+                value={formData.machineNumber}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-700 transition"
                 required
@@ -121,9 +159,10 @@ const BookMachine = () => {
 
             <button
               type="submit"
+              disabled={loading}
               className="w-full py-3 bg-[#032b56] hover:bg-[#04396b] text-white font-semibold rounded-xl shadow-md transition duration-300 transform hover:scale-[1.02]"
             >
-              Book Slot
+              {loading ? "Booking slot" : "Book slot"}
             </button>
           </form>
         </div>
