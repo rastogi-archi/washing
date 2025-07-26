@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server';
 import dbConnect from "@/lib/dbConnect";
 import BookingModel from "@/model/Booking.model";
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request) {
-  
   try {
     await dbConnect();
+
     const { name, email, machineNumber, date, startTime, endTime } = await request.json();
 
     if (!name || !email || !machineNumber || !date || !startTime || !endTime) {
@@ -50,6 +53,25 @@ export async function POST(request) {
       date,
       startTime,
       endTime,
+    });
+
+    await resend.emails.send({
+      from: 'LaundryMate <onboarding@resend.dev>',
+      to: 'rastogiarchi18@gmail.com',
+      subject: 'Your Laundry Slot is Confirmed!',
+      html: `
+        <div style="font-family: Arial, sans-serif; padding: 10px;">
+          <h2>Hello ${name},</h2>
+          <p>✅ Your laundry slot has been successfully booked.</p>
+          <p><strong>Details:</strong></p>
+          <ul>
+            <li><strong>Machine:</strong> ${machineNumber}</li>
+            <li><strong>Date:</strong> ${date}</li>
+            <li><strong>Time:</strong> ${startTime} to ${endTime}</li>
+          </ul>
+          <p>Thank you for using <strong>LaundryMate</strong>!</p>
+        </div>
+      `
     });
 
     return NextResponse.json({
