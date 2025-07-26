@@ -4,6 +4,8 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
 
 // Animation variants
 const slideLeft = {
@@ -114,8 +116,8 @@ const BookMachine = () => {
               { label: 'Your Email', name: 'email', type: 'text', placeholder: 'Enter your email' },
             ].map((field, i) => (
               <motion.div key={field.name} custom={i} variants={fadeInUp} initial="hidden" animate="show">
-                <label className="block mb-1 font-semibold text-gray-700">{field.label}</label>
-                <input
+                <Label className="block mb-1 font-semibold text-gray-700">{field.label}</Label>
+                <Input
                   type={field.type}
                   name={field.name}
                   value={formData[field.name]}
@@ -144,8 +146,8 @@ const BookMachine = () => {
             </motion.div>
 
             <motion.div custom={3} variants={fadeInUp} initial="hidden" animate="show">
-              <label className="block mb-1 font-semibold text-gray-700">Date</label>
-              <input
+              <Label className="block mb-1 font-semibold text-gray-700">Date</Label>
+              <Input
                 type="date"
                 name="date"
                 value={formData.date}
@@ -161,8 +163,8 @@ const BookMachine = () => {
                 { label: 'End Time', name: 'endTime' },
               ].map((time, i) => (
                 <motion.div key={time.name} custom={i + 4} variants={fadeInUp} initial="hidden" animate="show">
-                  <label className="block mb-1 font-semibold text-gray-700">{time.label}</label>
-                  <input
+                  <Label className="block mb-1 font-semibold text-gray-700">{time.label}</Label>
+                  <Input
                     type="time"
                     name={time.name}
                     value={formData[time.name]}

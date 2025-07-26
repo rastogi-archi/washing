@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
 import { imageUrls } from '@/utils/data';
 import Image from 'next/image';

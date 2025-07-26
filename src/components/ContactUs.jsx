@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { motion } from 'framer-motion';
+import { Input } from './ui/input';
 
 // New animation variants
 const zoomIn = {
@@ -104,7 +105,7 @@ const ContactUs = () => {
             <Label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Name
             </Label>
-            <input
+            <Input
               type="text"
               id="name"
               name="name"
@@ -118,7 +119,7 @@ const ContactUs = () => {
             <Label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Email
             </Label>
-            <input
+            <Input
               type="email"
               id="email"
               name="email"

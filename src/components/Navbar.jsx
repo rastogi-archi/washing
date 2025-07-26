@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { navbarLinks } from '@/utils/data'
 import Link from 'next/link'
-import { Button } from './ui/button'
+import { Button } from '@/components/ui/button'
 import { Menu, MoveRight, X } from 'lucide-react'
 
 const Navbar = () => {
@@ -38,9 +38,9 @@ const Navbar = () => {
                             LaundryMate
                         </Link>
                     </div>
-                    <button onClick={() => setIsOpen(!isOpen)} className='text-2xl'>
+                    <Button onClick={() => setIsOpen(!isOpen)} className='text-2xl'>
                         {isOpen ? <X className='size-7' /> : <Menu className='size-6' />}
-                    </button>
+                    </Button>
                 </div>
                 {isOpen && (
                     <div className='bg-gray-100 p-4'>
