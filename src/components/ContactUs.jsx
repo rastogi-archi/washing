@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react';
-import emailjs from '@emailjs/browser';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -27,25 +26,38 @@ const scaleIn = {
 const ContactUs = () => {
   const [loading, setLoading] = useState(false);
 
-  const sendEmail = (e) => {
-    e.preventDefault();
-    setLoading(true);
+  const sendEmail = async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
-    try {
-      emailjs.sendForm(
-        'service_4y9cfx8',
-        'template_u4ozcxj',
-        e.target,
-        'kV-2G4_2Wb-J-yHyH'
-      );
+  const formData = {
+    name: e.target.name.value,
+    email: e.target.email.value,
+    message: e.target.message.value,
+  };
+
+  try {
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
       toast.success('Email sent successfully!');
       e.target.reset();
-    } catch (error) {
-      toast.error('Failed to send email. Please try again.');
-    } finally {
-      setLoading(false);
+    } else {
+      toast.error(data.message || 'Failed to send email');
     }
-  };
+  } catch (error) {
+    toast.error('Something went wrong');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <section className="bg-white dark:bg-gray-900 mt-10 sm:mt-15 px-6 md:px-12 lg:px-24">
